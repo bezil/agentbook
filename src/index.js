@@ -111,6 +111,17 @@ app.post('/work/:id/complete', async (req, res) => {
   res.json(data);
 });
 
+// Delete work item
+app.delete('/work/:id', async (req, res) => {
+  const { error } = await supabase
+    .from('works')
+    .delete()
+    .eq('id', req.params.id);
+  
+  if (error) return res.status(400).json({ error: error.message });
+  res.json({ deleted: true });
+});
+
 // Get agents.md content
 app.get('/agents', async (req, res) => {
   const { data, error } = await supabase
