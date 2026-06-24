@@ -1,0 +1,14 @@
+#!/bin/bash
+# delete-work: Delete a work item from AgentBook
+# Usage: delete-work <work-id>
+
+AGENTBOOK_URL="https://gleaming-vanya-devbez-4d6574f5.koyeb.app"
+WORK_ID="$1"
+
+if [ -z "$WORK_ID" ]; then
+  echo "Usage: delete-work <work-id>"
+  exit 1
+fi
+
+echo "Deleting work $WORK_ID..."
+curl -s -X DELETE "$AGENTBOOK_URL/work/$WORK_ID" | python3 -m json.tool
