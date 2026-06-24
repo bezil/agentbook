@@ -135,7 +135,7 @@ app.get('/skills', async (req, res) => {
   res.json(data);
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`AgentBook running on port ${PORT}`);
 });
