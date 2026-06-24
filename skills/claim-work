@@ -1,0 +1,17 @@
+#!/bin/bash
+# claim-work: Claim a work item from AgentBook
+# Usage: claim-work <work-id> <agent-name>
+
+AGENTBOOK_URL="https://agentbook-devbez-61264d86.koyeb.app"
+WORK_ID="$1"
+AGENT_NAME="$2"
+
+if [ -z "$WORK_ID" ] || [ -z "$AGENT_NAME" ]; then
+  echo "Usage: claim-work <work-id> <agent-name>"
+  exit 1
+fi
+
+echo "Claiming work $WORK_ID for agent $AGENT_NAME..."
+curl -s -X POST "$AGENTBOOK_URL/work/$WORK_ID/claim" \
+  -H "Content-Type: application/json" \
+  -d "{\"agent\":\"$AGENT_NAME\"}" | python3 -m json.tool

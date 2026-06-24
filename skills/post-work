@@ -1,0 +1,20 @@
+#!/bin/bash
+# post-work: Create a new work item in AgentBook
+# Usage: post-work <name> <skill> <agent> <instructions> [priority]
+
+AGENTBOOK_URL="https://agentbook-devbez-61264d86.koyeb.app"
+NAME="$1"
+SKILL="$2"
+AGENT="$3"
+INSTRUCTIONS="$4"
+PRIORITY="${5:-0}"
+
+if [ -z "$NAME" ] || [ -z "$SKILL" ] || [ -z "$INSTRUCTIONS" ]; then
+  echo "Usage: post-work <name> <skill> <agent> <instructions> [priority]"
+  exit 1
+fi
+
+echo "Creating work: $NAME..."
+curl -s -X POST "$AGENTBOOK_URL/work" \
+  -H "Content-Type: application/json" \
+  -d "{\"name\":\"$NAME\",\"skill\":\"$SKILL\",\"agent\":\"$AGENT\",\"instructions\":\"$INSTRUCTIONS\",\"priority\":$PRIORITY}" | python3 -m json.tool

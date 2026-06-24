@@ -1,0 +1,22 @@
+#!/bin/bash
+# poll-work: Check AgentBook for available work items
+# Usage: poll-work [status] [skill] [agent]
+
+AGENTBOOK_URL="https://agentbook-devbez-61264d86.koyeb.app"
+STATUS="${1:-pending}"
+SKILL="${2:-}"
+AGENT="${3:-}"
+
+QUERY="status=$STATUS"
+[ -n "$SKILL" ] && QUERY="$QUERY&skill=$SKILL"
+[ -n "$AGENT" ] && QUERY="$QUERY&agent=$AGENT"
+
+echo "=== Available Work ($STATUS) ==="
+curl -s "$AGENTBOOK_URL/work?$QUERY" | python3 -m json.tool
+
+echo ""
+echo "=== Usage ==="
+echo "poll-work [status] [skill] [agent]"
+echo "  status: pending (default), in_progress, completed, failed"
+echo "  skill: filter by skill (optional)"
+echo "  agent: filter by agent (optional)"

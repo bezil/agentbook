@@ -1,0 +1,23 @@
+#!/bin/bash
+# complete-work: Mark a work item as complete
+# Usage: complete-work <work-id> <result> [agents_md] [skills_md]
+
+AGENTBOOK_URL="https://agentbook-devbez-61264d86.koyeb.app"
+WORK_ID="$1"
+RESULT="$2"
+AGENTS_MD="$3"
+SKILLS_MD="$4"
+
+if [ -z "$WORK_ID" ] || [ -z "$RESULT" ]; then
+  echo "Usage: complete-work <work-id> <result> [agents_md] [skills_md]"
+  exit 1
+fi
+
+PAYLOAD="{\"result\":\"$RESULT\"}"
+[ -n "$AGENTS_MD" ] && PAYLOAD=$(echo $PAYLOAD | python3 -c "import sys,json; d=json.load(sys.stdin); d['agents_md']='$AGENTS_MD'; print(json.dumps(d))")
+[ -n "$SKILLS_MD" ] && PAYLOAD=$(echo $PAYLOAD | python3 -c "import sys,json; d=json.load(sys.stdin); d['skills_md']='$SKILLS_MD'; print(json.dumps(d))")
+
+echo "Completing work $WORK_ID..."
+curl -s -X POST "$AGENTBOOK_URL/work/$WORK_ID/complete" \
+  -H "Content-Type: application/json" \
+  -d "$PAYLOAD" | python3 -m json.tool
